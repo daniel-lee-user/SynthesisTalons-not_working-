@@ -8,11 +8,11 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.robot.RobotMap;
 import frc.robot.commands.arcadeDrive;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;;
 
 
 /**
@@ -22,21 +22,25 @@ public class DriveTrain extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
-  public WPI_TalonSRX leftMaster = new WPI_TalonSRX(RobotMap.leftMasterPort);
+  public TalonSRX leftMaster = new TalonSRX(RobotMap.leftMasterPort);
 
-  public WPI_TalonSRX rightMaster = new WPI_TalonSRX(RobotMap.rightMasterPort);
-
-  public DifferentialDrive drive = new DifferentialDrive(leftMaster, rightMaster);
+  public TalonSRX rightMaster = new TalonSRX(RobotMap.rightMasterPort);
   
   public DriveTrain() {
 
   }
   public void manualDrive(double move, double turn) {
-    drive.arcadeDrive(move, turn);
+    leftMaster.set(ControlMode.PercentOutput, move);
+    rightMaster.set(ControlMode.PercentOutput, move);
   }
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
     setDefaultCommand(new arcadeDrive());
+  }
+  @Override
+  public void periodic() {
+    super.periodic();
+    manualDrive(1, 1);
   }
 }
